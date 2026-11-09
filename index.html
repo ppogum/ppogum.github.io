@@ -18,6 +18,7 @@ document.querySelectorAll('a[href^="mailto:"]').forEach(a=>{if(!contactDialog.co
 contactDialog.querySelector('.contact-close').onclick=()=>contactDialog.close();
 contactDialog.addEventListener('click',e=>{if(e.target===contactDialog){const r=contactDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)contactDialog.close()}});
 document.getElementById('copy-email').onclick=async()=>{const email=document.getElementById('contact-email'),status=document.getElementById('copy-status');try{await navigator.clipboard.writeText(email.value);status.textContent='이메일 주소를 복사했어요.'}catch{email.focus();email.select();status.textContent='이메일 주소를 길게 눌러 복사해 주세요.'}};
-</script><script src="analytics-config.js"></script><script src="analytics.js" defer></script></html>
+</script><script src="analytics-config.js"></script><script src="analytics.js?v=live-20261110" defer></script></html>
+
 
 

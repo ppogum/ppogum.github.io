@@ -16,11 +16,14 @@
     if (root.protocol !== 'https:' || !/^[a-z0-9-]+\.goatcounter\.com$/.test(root.hostname) || root.username || root.password || root.port) return;
   } catch { return; }
   const origin = root.origin;
+  const liveURL = 'https://ubin-project-notes.ubin2914.chatgpt.site/api/live-today';
   let dayShown = null;
   let loadingToday = false;
-  const dayKey = () => new Intl.DateTimeFormat('en-CA', {
-    timeZone: cfg.timezone || 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit'
-  }).format(new Date());
+  const dayKey = () => {
+    const parts = new Intl.DateTimeFormat('en-CA', {timeZone:'Asia/Seoul', year:'numeric', month:'2-digit', day:'2-digit'}).formatToParts(new Date());
+    const part = name => parts.find(p => p.type === name).value;
+    return part('year')+'-'+part('month')+'-'+part('day');
+  };
   function numericCount(value) {
     if (typeof value === 'number' && Number.isFinite(value) && value >= 0) return value;
     if (typeof value !== 'string' || !/^\d[\d, .\u00a0\u202f]*$/.test(value)) throw new Error('Invalid counter');
@@ -49,11 +52,20 @@
     const day = dayKey();
     if (day !== dayShown) today.textContent = '—';
     try {
-      const value = await count('/', day); // Only site visits, never project-click events.
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 9000);
+      let payload;
+      try {
+        const response = await fetch(liveURL, {cache:'no-store', credentials:'omit', signal:controller.signal});
+        if (!response.ok) throw new Error('Live count unavailable');
+        payload = await response.json();
+      } finally {clearTimeout(timeout);}
+      if (payload.date !== day || !Number.isSafeInteger(payload.today) || payload.today < 0) throw new Error('Invalid live count');
+      const value = payload.today;
       if (day !== dayKey()) return;
       today.textContent = new Intl.NumberFormat('ko-KR').format(value);
       dayShown = day;
-      today.title = '한국 시간 기준 오늘 방문 수 · 집계 반영에는 시간이 걸릴 수 있습니다.';
+      today.title = '한국 시간 기준 오늘 조회 수 · 15초마다 갱신 · 집계 저장 후 반영';
     } catch {
       today.textContent = '—';
       today.title = '방문 수를 불러오지 못했습니다.';
@@ -78,6 +90,7 @@
   tracker.async = true;
   tracker.src = 'https://gc.zgo.at/count.js';
   tracker.dataset.goatcounter = origin + '/count';
+  tracker.addEventListener('load', () => setTimeout(refreshToday, 12000), {once:true});
   document.head.appendChild(tracker);
   cards.forEach(card => card.addEventListener('click', () => {
     const project = projects[card.dataset.id];
@@ -86,9 +99,17 @@
     }
   }));
   refreshToday();
-  setInterval(() => { if (!document.hidden) refreshToday(); }, 60000);
+  setInterval(() => { if (!document.hidden) refreshToday(); }, 15000);
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) {
+      if (typeof window.goatcounter?.count === 'function') window.goatcounter.count({path:'/', event:false, no_session:true});
+      refreshToday();
+      setTimeout(refreshToday, 12000);
+    }
+  });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshToday(); });
 })();
+
 
 
 
