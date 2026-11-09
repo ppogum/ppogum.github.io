@@ -6,7 +6,7 @@
   const grid = document.querySelector('.grid');
   const cards = Array.from(document.querySelectorAll('.card'));
   const projects = {
-    '0': ['ppogum', '뽀금'], '6': ['doongdoong', '둥둥이'],
+    '0': ['ppogum', '뽀금'], '6': ['doongdoong', '마이둥 on Desktop'],
     '5': ['opic-coach', 'OPIc Coach'], '4': ['nailo', 'NAILO'],
     '2': ['salady', '샐러디'], '3': ['face-balance', 'Face Balance']
   };
@@ -89,5 +89,6 @@
   setInterval(() => { if (!document.hidden) refreshToday(); }, 60000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshToday(); });
 })();
+
 
 
