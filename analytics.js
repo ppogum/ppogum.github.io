@@ -28,7 +28,12 @@
   }
   async function count(path, start) {
     const url = new URL(origin + '/counter/' + encodeURIComponent(path) + '.json');
-    if (start) url.searchParams.set('start', start);
+    if (start) {
+      url.searchParams.set('start', start);
+      const nextDay = new Date(start + 'T00:00:00Z');
+      nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+      url.searchParams.set('end', nextDay.toISOString().slice(0, 10));
+    }
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 8000);
     try {
@@ -84,4 +89,5 @@
   setInterval(() => { if (!document.hidden) refreshToday(); }, 60000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshToday(); });
 })();
+
 
