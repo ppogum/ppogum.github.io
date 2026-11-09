@@ -68,7 +68,7 @@
     rows.forEach(row => grid.appendChild(row.card));
   }).catch(() => { /* Preserve the original order on network errors. */ });
   // Match the same canonical path for both public Today and the private dashboard.
-  window.goatcounter = { path: '/', allow_local: false, allow_frame: false };
+  window.goatcounter = { path: '/', no_session: true, allow_local: false, allow_frame: false };
   const tracker = document.createElement('script');
   tracker.async = true;
   tracker.src = 'https://gc.zgo.at/count.js';
@@ -84,3 +84,4 @@
   setInterval(() => { if (!document.hidden) refreshToday(); }, 60000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshToday(); });
 })();
+
