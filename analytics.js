@@ -16,6 +16,30 @@
     if (root.protocol !== 'https:' || !/^[a-z0-9-]+\.goatcounter\.com$/.test(root.hostname) || root.username || root.password || root.port) return;
   } catch { return; }
   const origin = root.origin;
+  const downloadCount=document.getElementById('mydoong-download-count');
+  const downloadEvents=[];
+  let loadingDownloads=false;
+  function flushDownloads(){
+    if(typeof window.goatcounter?.count!=='function')return;
+    while(downloadEvents.length){try{window.goatcounter.count(downloadEvents[0]);downloadEvents.shift()}catch{return}}
+  }
+  async function refreshDownloads(){
+    if(!downloadCount||loadingDownloads)return;loadingDownloads=true;
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),9000);
+    try{
+      const response=await fetch('https://ubin-project-notes.ubin2914.chatgpt.site/api/mydoong-downloads',{cache:'no-store',credentials:'omit',signal:controller.signal});
+      if(!response.ok)throw Error('counter unavailable');const data=await response.json();
+      if(!Number.isSafeInteger(data.downloads)||data.downloads<0)throw Error('invalid counter');
+      downloadCount.textContent=new Intl.NumberFormat('ko-KR').format(data.downloads);downloadCount.title='누적 다운로드 버튼 클릭 수 · 15초마다 확인';
+    }catch{downloadCount.textContent='—';downloadCount.title='누적 횟수를 불러오지 못했어요. PDF는 다운로드할 수 있어요.'}finally{clearTimeout(timer);loadingDownloads=false}
+  }
+  document.addEventListener('click',event=>{
+    const link=event.target instanceof Element?event.target.closest('[data-download="mydoong-guide"]'):null;
+    if(!link)return;
+    downloadEvents.push({path:'download-mydoong-guide',title:'마이둥 제작 가이드 PDF 다운로드',event:true,no_session:true});flushDownloads();
+    setTimeout(refreshDownloads,12000);setTimeout(refreshDownloads,25000);
+  });
+
   const liveURL = 'https://ubin-project-notes.ubin2914.chatgpt.site/api/live-today';
   let dayShown = null;
   let loadingToday = false;
@@ -78,7 +102,7 @@
   tracker.async = true;
   tracker.src = 'https://gc.zgo.at/count.js';
   tracker.dataset.goatcounter = origin + '/count';
-  tracker.addEventListener('load', () => setTimeout(refreshToday, 12000), {once:true});
+  tracker.addEventListener('load', () => {flushDownloads();setTimeout(refreshToday,12000)}, {once:true});
   document.head.appendChild(tracker);
   cards.forEach(card => card.addEventListener('click', () => {
     const project = projects[card.dataset.id];
@@ -87,6 +111,8 @@
     }
   }));
   refreshToday();
+  refreshDownloads();
+  setInterval(()=>{if(!document.hidden)refreshDownloads()},15000);
   setInterval(() => { if (!document.hidden) refreshToday(); }, 15000);
   window.addEventListener('pageshow', event => {
     if (event.persisted) {
@@ -95,8 +121,9 @@
       setTimeout(refreshToday, 12000);
     }
   });
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshToday(); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) {refreshToday();refreshDownloads()} });
 })();
+
 
 
 
