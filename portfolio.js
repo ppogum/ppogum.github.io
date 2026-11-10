@@ -20,28 +20,24 @@ const contactDialog=document.getElementById('contact-dialog');
 function gallery(project){
  const host=document.getElementById('project-gallery');host.replaceChildren();
  if(!project.count)return;
- const track=document.createElement('div');track.className='gallery-track'+(project.slug==='mydoong'?' desktop-gallery':'');track.tabIndex=0;track.setAttribute('role','region');track.setAttribute('aria-label',project.title+' 화면 갤러리. 좌우 화살표로 이동');
- for(let i=1;i<=project.count;i++){
-  const img=document.createElement('img');img.src=`assets/${project.slug}-${i}.webp`;img.alt=project.alt[i-1];img.draggable=false;img.decoding='async';img.height=305;img.width=project.slug==='mydoong'?(i===1?282:534):(project.slug==='face'?163:167);track.append(img);
- }
- const controls=document.createElement('div');controls.className='gallery-controls';
- const pagination=document.createElement('span');pagination.className='gallery-pagination';pagination.setAttribute('aria-live','polite');
- const next=document.createElement('button');next.className='gallery-next';next.textContent='SWIPE →';next.setAttribute('aria-label','다음 이미지');controls.append(pagination,next);host.append(track,controls);
+ const files={ppogum:'ppogum-gallery.png',face:'face-gallery.svg',mydoong:'mydoong-gallery.svg',opic:'opic-gallery.svg'};
+ const frame=document.createElement('div');frame.className='gallery-frame';
+ const track=document.createElement('div');track.className='gallery-track';track.tabIndex=0;track.setAttribute('role','region');track.setAttribute('aria-label',project.title+' 전체 이미지. 좌우로 스크롤');
+ const img=document.createElement('img');img.src='assets/original/'+files[project.slug];img.alt=project.title+' 전체 화면 모음';img.draggable=false;img.height=305;img.width={ppogum:1285,face:1084,mydoong:747,opic:1482}[project.slug];track.append(img);
+ const next=document.createElement('button');next.className='gallery-next';next.textContent='SWIPE →';next.setAttribute('aria-label','이미지를 오른쪽으로 스크롤');frame.append(track,next);host.append(frame);
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- const step=()=>track.children[0].getBoundingClientRect().width+parseFloat(getComputedStyle(track).gap);
- const move=direction=>{const atEnd=track.scrollLeft>=track.scrollWidth-track.clientWidth-3;track.scrollTo({left:direction===1&&atEnd?0:track.scrollLeft+direction*step(),behavior:reduced?'instant':'smooth'});};
+ const move=direction=>{const atEnd=track.scrollLeft>=track.scrollWidth-track.clientWidth-2;track.scrollTo({left:direction===1&&atEnd?0:track.scrollLeft+direction*track.clientWidth*.75,behavior:reduced?'instant':'smooth'})};
  next.onclick=()=>move(1);track.onkeydown=e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();move(e.key==='ArrowRight'?1:-1)}};
- const update=()=>{pagination.textContent=`${Math.min(project.count,Math.round(track.scrollLeft/step())+1)} / ${project.count}`};track.addEventListener('scroll',update,{passive:true});pagination.textContent=`1 / ${project.count}`;
  let drag=null;
  track.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button!==0)return;drag={x:e.clientX,left:track.scrollLeft};track.classList.add('dragging');track.setPointerCapture(e.pointerId)});
  track.addEventListener('pointermove',e=>{if(drag)track.scrollLeft=drag.left-(e.clientX-drag.x)});
- const end=()=>{if(!drag)return;drag=null;track.classList.remove('dragging');track.scrollTo({left:Math.round(track.scrollLeft/step())*step(),behavior:reduced?'instant':'smooth'})};
+ const end=()=>{drag=null;track.classList.remove('dragging')};
  track.addEventListener('pointerup',end);track.addEventListener('pointercancel',end);track.addEventListener('lostpointercapture',end);
 }
 document.querySelectorAll('.card').forEach(card=>card.addEventListener('click',()=>{
  const p=projects[card.dataset.id];document.getElementById('project-title').textContent=p.title;
  document.getElementById('project-description').innerHTML=p.paragraphs.map(text=>`<p>${text}</p>`).join('');
- document.getElementById('project-attachment').hidden=card.dataset.id!=='6';gallery(p);projectDialog.showModal();projectDialog.scrollTop=0;
+ document.getElementById('project-attachment').hidden=card.dataset.id!=='6';document.getElementById('project-attachment').open=false;gallery(p);projectDialog.showModal();projectDialog.scrollTop=0;
 }));
 document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{
  document.querySelectorAll('[data-filter]').forEach(b=>{b.classList.toggle('active',b===button);b.setAttribute('aria-pressed',String(b===button))});
