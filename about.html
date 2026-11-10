@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="비인 — 학력, 자격증, 사용 툴">
+<title>About — bean.</title>
+<link rel="stylesheet" href="portfolio.css?v=web-v6-20261110">
+<link rel="stylesheet" href="about.css?v=about-v2">
+<script src="analytics-config.js"></script>
+<script src="analytics.js?v=design-web-v6-20261110" defer></script>
+</head>
+<body class="about-page">
+<header><a class="brand" href="index.html" aria-label="홈">bean.</a><nav><a href="index.html#work">Work</a><a href="mailto:ppogum44@gmail.com" class="contact-link">Contact ↗</a></nav></header>
+<main>
+
+<section class="a-hero" aria-label="프로필">
+<img class="avatar" src="assets/web/avatar.webp" width="90" height="90" alt="미소 짓는 초록 콩">
+<h1>비인</h1>
+</section>
+
+<section class="block" aria-labelledby="h-edu">
+<h2 id="h-edu" class="b-title">Education</h2>
+<ul class="list">
+<li><span class="c-name">경희대학교 회화과 <small>졸업</small></span><span class="date">2019.03 – 2024.02</span></li>
+</ul>
+</section>
+
+<section class="block" aria-labelledby="h-cert">
+<h2 id="h-cert" class="b-title">Certificates</h2>
+<ul class="list">
+<li><span class="c-name">OPIc <b class="ih">IH</b></span><span class="date">2026.07.20</span></li>
+<li><span class="c-name">ADsP</span><span class="date">2026.06.05</span></li>
+<li><span class="c-name">Photoshop 1급</span><span class="date">2026.03.20</span></li>
+<li><span class="c-name">Illustrator 2급</span><span class="date">2026.05.15</span></li>
+<li><span class="c-name">Google Analytics</span><span class="date">2026.07.28</span></li>
+<li><span class="c-name">ITQ</span><span class="date">2011.03.31</span></li>
+</ul>
+</section>
+
+<section class="block" aria-labelledby="h-tool">
+<h2 id="h-tool" class="b-title">Tools</h2>
+<dl class="tool-list">
+<div><dt>AI</dt><dd class="tags"><span>Claude</span><span>ChatGPT</span><span>Gemini</span></dd></div>
+<div><dt>Design</dt><dd class="tags"><span>Figma</span><span>Photoshop</span><span>Illustrator</span><span>Procreate</span></dd></div>
+<div><dt>Other</dt><dd class="tags"><span>Notion</span><span>Godot</span><span>Xcode</span><span>CapCut</span></dd></div>
+</dl>
+</section>
+
+</main>
+<footer>© 2026 비인</footer>
+
+<dialog id="contact-dialog" aria-labelledby="contact-title"><div class="dialog-top"><button class="close" aria-label="연락처 닫기">닫기 ×</button></div><div class="eyebrow">CONTACT</div><h2 id="contact-title">💌 협업 제안</h2><p>아래 이메일로 연락해 주세요.</p><input id="contact-email" aria-label="이메일 주소" value="ppogum44@gmail.com" readonly><div class="contact-actions"><button id="copy-email">주소 복사</button><a href="mailto:ppogum44@gmail.com?subject=협업%20문의">메일 앱 열기 ↗</a><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=ppogum44%40gmail.com&amp;su=협업%20문의" target="_blank" rel="noopener">Gmail로 작성 ↗</a></div><p id="copy-status" role="status" aria-live="polite"></p></dialog>
+<script>
+const cd=document.getElementById('contact-dialog');
+document.querySelectorAll('.contact-link').forEach(l=>l.addEventListener('click',e=>{e.preventDefault();document.getElementById('copy-status').textContent='';cd.showModal()}));
+cd.querySelector('.close').onclick=()=>cd.close();
+cd.addEventListener('click',e=>{if(e.target===cd)cd.close()});
+document.getElementById('copy-email').onclick=async()=>{const m=document.getElementById('contact-email'),s=document.getElementById('copy-status');try{await navigator.clipboard.writeText(m.value);s.textContent='이메일 주소를 복사했어요.'}catch{m.focus();m.select();s.textContent='이메일 주소를 선택해 복사해 주세요.'}};
+</script>
+</body>
+</html>
