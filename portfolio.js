@@ -20,10 +20,10 @@ const contactDialog=document.getElementById('contact-dialog');
 function gallery(project){
  const host=document.getElementById('project-gallery');host.replaceChildren();
  if(!project.count)return;
- const files={ppogum:'ppogum-gallery.png',face:'face-gallery.svg',mydoong:'mydoong-gallery.svg',opic:'opic-gallery.svg'};
+ const files={ppogum:'ppogum-gallery.webp',face:'face-gallery.webp',mydoong:'mydoong-gallery.webp',opic:'opic-gallery.webp'};
  const frame=document.createElement('div');frame.className='gallery-frame';
  const track=document.createElement('div');track.className='gallery-track';track.tabIndex=0;track.setAttribute('role','region');track.setAttribute('aria-label',project.title+' 전체 이미지. 좌우로 스크롤');
- const img=document.createElement('img');img.src='assets/original/'+files[project.slug]+'?v=gallery-v4';img.alt=project.title+' 전체 화면 모음';img.draggable=false;img.height=305;img.width={ppogum:1285,face:1084,mydoong:747,opic:1295}[project.slug];track.append(img);
+ const img=document.createElement('img');img.src='assets/web/'+files[project.slug]+'?v=gallery-v6';img.alt=project.title+' 전체 화면 모음';img.draggable=false;img.height=305;img.width={ppogum:1277,face:1084,mydoong:747,opic:1295}[project.slug];track.append(img);
  const next=document.createElement('button');next.className='gallery-next';next.textContent='SWIPE →';next.setAttribute('aria-label','이미지를 오른쪽으로 스크롤');frame.append(track,next);host.append(frame);
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  const move=direction=>{const atEnd=track.scrollLeft>=track.scrollWidth-track.clientWidth-2;track.scrollTo({left:direction===1&&atEnd?0:track.scrollLeft+direction*track.clientWidth*.75,behavior:reduced?'instant':'smooth'})};
