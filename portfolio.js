@@ -20,10 +20,10 @@ const contactDialog=document.getElementById('contact-dialog');
 function gallery(project){
  const host=document.getElementById('project-gallery');host.replaceChildren();
  if(!project.count)return;
- const files={ppogum:'ppogum-gallery.webp',face:'face-gallery.webp',mydoong:'mydoong-gallery.webp',opic:'opic-gallery.webp'};
+ const files={ppogum:'ppogum-gallery.png',face:'face-gallery.png',mydoong:'mydoong-gallery.png',opic:'opic-gallery.png'};
  const frame=document.createElement('div');frame.className='gallery-frame';
  const track=document.createElement('div');track.className='gallery-track';track.tabIndex=0;track.setAttribute('role','region');track.setAttribute('aria-label',project.title+' 전체 이미지. 좌우로 스크롤');
- const img=document.createElement('img');img.src='assets/web/'+files[project.slug]+'?v=gallery-v6';img.alt=project.title+' 전체 화면 모음';img.draggable=false;img.height=305;img.width={ppogum:1277,face:1084,mydoong:747,opic:1295}[project.slug];track.append(img);
+ const img=document.createElement('img');img.src='assets/web/'+files[project.slug]+'?v=gallery-png-v7';img.alt=project.title+' 전체 화면 모음';img.draggable=false;img.height=project.slug==='face'?307:305;img.width={ppogum:1277,face:1084,mydoong:747,opic:1295}[project.slug];track.append(img);
  const next=document.createElement('button');next.className='gallery-next';next.textContent='SWIPE →';next.setAttribute('aria-label','이미지를 오른쪽으로 스크롤');frame.append(track,next);host.append(frame);
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  const move=direction=>{const atEnd=track.scrollLeft>=track.scrollWidth-track.clientWidth-2;track.scrollTo({left:direction===1&&atEnd?0:track.scrollLeft+direction*track.clientWidth*.75,behavior:reduced?'instant':'smooth'})};
@@ -49,3 +49,4 @@ for(const dialog of [projectDialog,contactDialog]){
 }
 document.querySelectorAll('a[href^="mailto:"]').forEach(link=>{if(!contactDialog.contains(link))link.addEventListener('click',e=>{e.preventDefault();document.getElementById('copy-status').textContent='';contactDialog.showModal()})});
 document.getElementById('copy-email').onclick=async()=>{const email=document.getElementById('contact-email');const status=document.getElementById('copy-status');try{await navigator.clipboard.writeText(email.value);status.textContent='이메일 주소를 복사했어요.'}catch{email.focus();email.select();status.textContent='이메일 주소를 선택해 복사해 주세요.'}};
+

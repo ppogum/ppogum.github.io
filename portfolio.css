@@ -28,3 +28,4 @@ dialog h2{font-size:24px;line-height:1.35;margin:16px 0 14px}
 .attachment-body{display:flex;align-items:center;gap:10px;border-top:1px solid #d4d8ca;padding:11px 13px;font-size:11px;color:#747970}
 @media(max-width:480px){dialog{padding:18px 20px}.dialog-top{margin-bottom:8px}.gallery-frame{margin-top:10px}.gallery-track img{height:clamp(125px,25dvh,210px)}dialog h2{font-size:21px;margin:14px 0 12px}#project-description p{font-size:12px;line-height:1.6;margin-bottom:12px}.project-meta{margin-top:12px!important;font-size:8px!important}#project-attachment summary{font-size:11px;padding:10px 12px}}
 .art.opic{background:#e3ecfa}
+
