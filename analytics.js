@@ -71,19 +71,7 @@
       today.title = '방문 수를 불러오지 못했습니다.';
     } finally { loadingToday = false; }
   }
-  let userInteracted = false;
-  document.addEventListener('pointerdown', () => { userInteracted = true; }, { once: true });
-  document.addEventListener('keydown', () => { userInteracted = true; }, { once: true });
-  // Load shared totals once; do not move a card under a visitor's pointer.
-  Promise.all(cards.map(async (card, index) => {
-    const project = projects[card.dataset.id];
-    const clicks = project ? await count('project-' + project[0]) : 0;
-    return { card, index, clicks };
-  })).then(rows => {
-    if (!grid || userInteracted) return;
-    rows.sort((a, b) => b.clicks - a.clicks || a.index - b.index);
-    rows.forEach(row => grid.appendChild(row.card));
-  }).catch(() => { /* Preserve the original order on network errors. */ });
+  // Keep the project order chosen in the portfolio design.
   // Match the same canonical path for both public Today and the private dashboard.
   window.goatcounter = { path: '/', no_session: true, allow_local: false, allow_frame: false };
   const tracker = document.createElement('script');
