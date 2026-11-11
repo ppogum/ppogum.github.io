@@ -6,10 +6,10 @@
 .list{list-style:none;margin:0;padding:4px 18px;background:#fff;border-radius:24px}
 .list li{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;border-top:1px solid #eeeee8}
 .list li:first-child{border-top:0}
-.c-name{font-size:14px;font-weight:600;letter-spacing:-.3px}
+.c-name{font-size:13px;font-weight:400;letter-spacing:-.3px}
 .c-name small{font-size:11px;font-weight:400;color:var(--muted);margin-left:4px}
 .date{flex:none;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
-.ih{display:inline-block;margin-left:4px;padding:0 7px;border-radius:7px;background:#e3ecfa;color:#5373aa;font-size:12px;font-weight:650;line-height:20px}
+.ih{display:inline-block;margin-left:4px;padding:0 7px;border-radius:7px;background:#e3ecfa;color:#5373aa;font-size:11px;font-weight:400;line-height:18px}
 .about-page .tool-list{background:#fff;border-radius:24px;padding:12px 18px}
 .about-page .tool-list dd{color:var(--ink)}
 @media(min-width:700px){
@@ -17,7 +17,12 @@
 .block{margin-top:40px}
 .b-title{font-size:13px}
 .list{padding:6px 24px}.list li{min-height:56px}
-.c-name{font-size:16px}.c-name small{font-size:12px}.date{font-size:13px}
+.c-name{font-size:14px}.c-name small{font-size:12px}.date{font-size:13px}
 .about-page .tool-list{padding:14px 24px}
 }
 
+
+#h-edu,#h-cert{font-size:10px;font-weight:400}
+@media(min-width:700px){
+#h-edu,#h-cert{font-size:12px}
+}
